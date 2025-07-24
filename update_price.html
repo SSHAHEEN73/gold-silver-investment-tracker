@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Update Price</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">{{ form.metal_type.label }} {{ form.metal_type(class="form-select") }}</div>
+    <div class="mb-3">{{ form.price_aed.label }} {{ form.price_aed(class="form-control") }}</div>
+    <button type="submit" class="btn btn-success">Update</button>
+</form>
+{% endblock %}
