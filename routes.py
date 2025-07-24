@@ -18,10 +18,9 @@ def add_investment():
         investment_amount = form.investment_amount.data or 0
         price_per_gram = form.price_per_gram.data or 0
 
-        # تحويل إذا العملة KWD
+        # تحويل إذا العملة KWD (ضرب المبلغ فقط)
         if form.currency.data == 'KWD':
-            investment_amount *= 12
-            price_per_gram *= 12
+            investment_amount *= 12  # تحويل المبلغ إلى AED
 
         quantity_grams = (investment_amount / price_per_gram) if price_per_gram > 0 else 0
 
@@ -38,3 +37,30 @@ def add_investment():
         flash('Investment added successfully!', 'success')
         return redirect(url_for('index'))
     return render_template('add_investment.html', form=form)
+
+@app.route('/update_price', methods=['GET', 'POST'])
+def update_price():
+    form = PriceUpdateForm()
+    if form.validate_on_submit():
+        metal = MetalPrice.query.filter_by(metal_type=form.metal_type.data).first()
+        if not metal:
+            metal = MetalPrice(metal_type=form.metal_type.data, price_aed=form.price_aed.data)
+            db.session.add(metal)
+        else:
+            metal.price_aed = form.price_aed.data
+            metal.last_updated = datetime.utcnow()
+        db.session.commit()
+        flash('Price updated successfully!', 'success')
+        return redirect(url_for('index'))
+    return render_template('update_price.html', form=form)
+
+@app.route('/add_scenario', methods=['GET', 'POST'])
+def add_scenario():
+    form = ProfitCalculatorForm()
+    if form.validate_on_submit():
+        new_scenario = ProfitScenario(name=form.name.data, percentage_growth=form.percentage_growth.data)
+        db.session.add(new_scenario)
+        db.session.commit()
+        flash('Scenario added successfully!', 'success')
+        return redirect(url_for('index'))
+    return render_template('add_scenario.html', form=form)
