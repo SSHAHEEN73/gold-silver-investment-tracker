@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home</title>
+    <title>Gold & Silver Tracker</title>
 </head>
 <body>
-    <h1>Welcome to Investment App</h1>
-    <a href="/dashboard">Go to Dashboard</a>
+    <h1>Investments</h1>
+    <form method="POST" action="{{ url_for('main.add_investment') }}">
+        <input type="text" name="metal_type" placeholder="Gold/Silver" required>
+        <input type="number" step="0.01" name="amount" placeholder="Amount" required>
+        <input type="number" step="0.01" name="purchase_price" placeholder="Price" required>
+        <button type="submit">Add Investment</button>
+    </form>
+
+    <ul>
+    {% for inv in investments %}
+        <li>{{ inv.metal_type }}: {{ inv.amount }} at ${{ inv.purchase_price }}</li>
+    {% endfor %}
+    </ul>
+
+    <h1>Prices</h1>
+    <a href="{{ url_for('main.update_prices') }}">Update Prices</a>
+    <ul>
+    {% for price in prices %}
+        <li>Gold: ${{ price.gold }} | Silver: ${{ price.silver }}</li>
+    {% endfor %}
+    </ul>
 </body>
 </html>
