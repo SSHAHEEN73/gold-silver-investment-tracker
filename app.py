@@ -1,38 +1,32 @@
-import os
-import logging
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
+from flask_wtf.csrf import CSRFProtect
 from werkzeug.middleware.proxy_fix import ProxyFix
+import os
 
-
-class Base(DeclarativeBase):
-    pass
-
-
-db = SQLAlchemy(model_class=Base)
-
-# create the app
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key-change-in-production")
-app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+app.wsgi_app = ProxyFix(app.wsgi_app)
 
-# configure the database
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///investments.db")
-app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "pool_recycle": 300,
-    "pool_pre_ping": True,
-}
+# إعدادات التطبيق
+app.config['SECRET_KEY'] = os.getenv('SESSION_SECRET', 'dev_secret_key')
 
-# Enable debug logging
-logging.basicConfig(level=logging.DEBUG)
+# إعداد قاعدة البيانات
+DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///investments.db')
+if DATABASE_URL.startswith('postgres://'):
+    DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://')
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# initialize the app with the extension
-db.init_app(app)
+db = SQLAlchemy(app)
+csrf = CSRFProtect(app)
 
+# استيراد الملفات الداخلية
+from models import Investment, MetalPrice, ProfitScenario
+import routes
+
+# إنشاء الجداول في حالة عدم وجودها
 with app.app_context():
-    # Import models and routes
-    import models  # noqa: F401
-    import routes  # noqa: F401
-    
     db.create_all()
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
