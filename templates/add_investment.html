@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Add New Investment</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.date.label(class="form-label") }}
+            {{ form.date(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.metal_type.label(class="form-label") }}
+            {{ form.metal_type(class="form-select") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.investment_amount.label(class="form-label") }}
+            {{ form.investment_amount(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.currency.label(class="form-label") }}
+            {{ form.currency(class="form-select") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.price_per_gram.label(class="form-label") }}
+            {{ form.price_per_gram(class="form-control") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
