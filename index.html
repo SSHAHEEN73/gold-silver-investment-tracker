@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">Investments</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Metal</th>
+            <th>Amount</th>
+            <th>Currency</th>
+            <th>Price/Gram</th>
+            <th>Quantity (g)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for inv in investments %}
+        <tr>
+            <td>{{ inv.date }}</td>
+            <td>{{ inv.metal_type }}</td>
+            <td>{{ inv.investment_amount }}</td>
+            <td>{{ inv.currency }}</td>
+            <td>{{ inv.price_per_gram }}</td>
+            <td>{{ inv.quantity_grams }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 class="mt-4 mb-3">Current Prices</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Metal</th>
+            <th>Price (AED/g)</th>
+            <th>Last Updated</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for price in prices %}
+        <tr>
+            <td>{{ price.metal_type }}</td>
+            <td>{{ price.price_aed }}</td>
+            <td>{{ price.last_updated }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 class="mt-4 mb-3">Profit Scenarios</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Growth %</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in scenarios %}
+        <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ s.percentage_growth }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
