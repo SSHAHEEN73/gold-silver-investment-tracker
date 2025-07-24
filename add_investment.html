@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Add Investment</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">{{ form.date.label }} {{ form.date(class="form-control") }}</div>
+    <div class="mb-3">{{ form.metal_type.label }} {{ form.metal_type(class="form-select") }}</div>
+    <div class="mb-3">{{ form.investment_amount.label }} {{ form.investment_amount(class="form-control") }}</div>
+    <div class="mb-3">{{ form.currency.label }} {{ form.currency(class="form-select") }}</div>
+    <div class="mb-3">{{ form.price_per_gram.label }} {{ form.price_per_gram(class="form-control") }}</div>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+{% endblock %}
