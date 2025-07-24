@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="mb-4 text-center">Gold & Silver Investment Tracker</h1>
+
+<div class="d-flex justify-content-between mb-4">
+    <a href="{{ url_for('add_investment') }}" class="btn btn-primary">Add Investment</a>
+    <a href="{{ url_for('update_price') }}" class="btn btn-warning">Update Metal Prices</a>
+    <a href="{{ url_for('add_scenario') }}" class="btn btn-success">Add Profit Scenario</a>
+</div>
+
+<!-- Investments Table -->
+<h3>Investments</h3>
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Metal</th>
+            <th>Amount</th>
+            <th>Currency</th>
+            <th>Price/Gram</th>
+            <th>Quantity (g)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for inv in investments %}
+        <tr>
+            <td>{{ inv.date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ inv.metal_type }}</td>
+            <td>{{ inv.investment_amount }}</td>
+            <td>{{ inv.currency }}</td>
+            <td>{{ inv.price_per_gram }}</td>
+            <td>{{ "%.2f"|format(inv.quantity_grams) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Metal Prices Table -->
+<h3>Current Metal Prices</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Metal</th>
+            <th>Price (AED/gram)</th>
+            <th>Last Updated</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for price in prices %}
+        <tr>
+            <td>{{ price.metal_type }}</td>
+            <td>{{ price.price_aed }}</td>
+            <td>{{ price.last_updated.strftime('%Y-%m-%d %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Profit Scenarios Table -->
+<h3>Profit Scenarios</h3>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Growth %</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for scenario in scenarios %}
+        <tr>
+            <td>{{ scenario.name }}</td>
+            <td>{{ scenario.percentage_growth }}%</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
